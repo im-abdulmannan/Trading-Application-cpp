@@ -27,6 +27,11 @@ public:
      */
     bool canFulfillOrder(OrderBookEntry order);
 
+    /** update the content of the user wallet
+     * assume the order was created by owner of wallet
+     */
+    void processSale(OrderBookEntry &sale);
+
     /* Generate a string representation of the wallet */
     std::string toString();
 

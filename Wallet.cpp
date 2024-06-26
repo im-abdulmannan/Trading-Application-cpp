@@ -74,6 +74,32 @@ bool Wallet::canFulfillOrder(OrderBookEntry order)
     return false;
 }
 
+void Wallet::processSale(OrderBookEntry &sale)
+{
+    std::vector<std::string> curr = CSVReader::tokenise(sale.productType, '/');
+    if (sale.orderType == OrderBookType::askSale)
+    {
+        double outgoingAmount = sale.amount;
+        std::string outgoingCurrency = curr[0];
+        double incomingAmount = sale.amount * sale.price;
+        std::string incomingCurrency = curr[1];
+
+        currencies[incomingCurrency] += incomingAmount;
+        currencies[outgoingCurrency] -= outgoingAmount;
+    }
+
+    if (sale.orderType == OrderBookType::bidSale)
+    {
+        double incomingAmount = sale.amount;
+        std::string incomingCurrency = curr[0];
+        double outgoingAmount = sale.amount * sale.price;
+        std::string outgoingCurrency = curr[1];
+
+        currencies[incomingCurrency] += incomingAmount;
+        currencies[outgoingCurrency] -= outgoingAmount;
+    }
+}
+
 std::string Wallet::toString()
 {
     std::string s;

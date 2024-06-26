@@ -8,7 +8,8 @@ enum class OrderBookType
     bid,
     ask,
     unknown,
-    sale
+    askSale,
+    bidSale
 };
 
 class OrderBookEntry
@@ -18,7 +19,8 @@ public:
                    double _amount,
                    string _timeStamp,
                    string _productType,
-                   OrderBookType _orderType);
+                   OrderBookType _orderType,
+                   string username = "dot");
 
     static OrderBookType stringToOrderBookType(string s);
 
@@ -42,4 +44,5 @@ public:
     string timeStamp;
     string productType;
     OrderBookType orderType;
+    string username;
 };

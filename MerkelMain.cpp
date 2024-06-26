@@ -19,6 +19,11 @@ void MerkelMain::goToNextTimeFrame()
     for (OrderBookEntry &sale : sales)
     {
         cout << "Sale Price: " << sale.price << " amount " << sale.amount << endl;
+        if (sale.username == "simuser")
+        {
+            // update the user wallet
+            wallet.processSale(sale);
+        }
     }
     currentTime = orderBook.getNextTime(currentTime);
 }
@@ -28,7 +33,7 @@ void MerkelMain::init()
 {
     int input;
     currentTime = orderBook.getEarliestTime();
-    wallet.insertCurrency("BTC", 20.0);
+    wallet.insertCurrency("BTC", 10.0);
     while (true)
     {
         printMenu();
@@ -59,7 +64,7 @@ void MerkelMain::printHelp()
 void MerkelMain::printMarketStats()
 {
 
-    for (string &p : orderBook.getKnownProducts())
+    for (string const&p : orderBook.getKnownProducts())
     {
         cout << "Product: " << p << endl;
         vector<OrderBookEntry> entries = orderBook.getOrders(OrderBookType::ask, p, currentTime);
@@ -92,6 +97,7 @@ void MerkelMain::enterOffer()
                 currentTime,
                 tokens[0],
                 OrderBookType::ask);
+            obe.username = "simuser";
             if (wallet.canFulfillOrder(obe))
             {
                 cout << "Wallet looks good!" << endl;
@@ -130,6 +136,7 @@ void MerkelMain::enterBid()
                 currentTime,
                 tokens[0],
                 OrderBookType::bid);
+            obe.username = "simuser";
             if (wallet.canFulfillOrder(obe))
             {
                 cout << "Wallet looks good!" << endl;

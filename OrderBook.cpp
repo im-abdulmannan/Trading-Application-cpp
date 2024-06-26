@@ -87,7 +87,19 @@ vector<OrderBookEntry> OrderBook::matchAsksToBids(string product, string timesta
         {
             if (bid.price >= ask.price)
             {
-                OrderBookEntry sale{ask.price, 0, timestamp, product, OrderBookType::sale};
+
+                OrderBookEntry sale{ask.price, 0, timestamp, product, OrderBookType::askSale};
+
+                if (bid.username == "simuser")
+                {
+                    sale.username = "simuser";
+                    sale.orderType = OrderBookType::bidSale;
+                }
+                else if (ask.username == "simuser")
+                {
+                    sale.username = "simuser";
+                    sale.orderType = OrderBookType::askSale;
+                }
 
                 if (bid.amount == ask.amount)
                 {
@@ -103,7 +115,7 @@ vector<OrderBookEntry> OrderBook::matchAsksToBids(string product, string timesta
                     bid.amount -= ask.amount;
                     break;
                 }
-                else if (bid.amount < ask.amount)
+                else if (bid.amount < ask.amount && bid.amount > 0)
                 {
                     sale.amount = bid.amount;
                     sales.push_back(sale);
